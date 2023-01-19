@@ -1,0 +1,54 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: thor
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 123.60.178.171:8848
+
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1.0 # 将采样比例设置为 1.0，也就是全部都需要。默认是 0.1
+  zipkin:
+    base-url: http://123.60.178.171:9411/ # 指定了 Zipkin 服务器的地址
+
+  datasource:
+    url: jdbc:mysql://123.60.178.171:3306/spring-boot-demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+
+    hikari:
+      minimum-idle: 5
+      connection-test-query: SELECT 1 FROM DUAL
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: ThorHikariCP
+      max-lifetime: 60000
+      connection-timeout: 30000
+
+logging:
+  level:
+    com.xkcoding: debug
+    com.xkcoding.orm.mybatis.plus.mapper: trace
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+
+  typeAliasesPackage: org.utopia.top.entity
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      table-underline: true
+      db-type: mysql
+    refresh: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
